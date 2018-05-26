@@ -6,21 +6,21 @@ def file_has_null_ending?(filename, num_bytes = 10)
   return last_bytes === "\u0000" * num_bytes
 end
 
-def get_all_files_from_directory(dir)
-  return Dir[ File.join(dir, '**', '*') ].reject { |file| File.directory?(file) }
+def get_all_filenames_from_directory(dir)
+  return Dir[ File.join(dir, '**', '*') ].reject { |filename| File.directory?(filename) }
 end
 
 unless ARGV.empty?
-  files = get_all_files_from_directory(ARGV.first)
+  filenames = get_all_filenames_from_directory(ARGV.first)
 
   errors = Array.new
 
   File.open("corrupted_files.log", "w") do |output|
-    files.each do |file|
+    filenames.each do |filename|
       begin
-        if file_has_null_ending?(file)
-          output.write(file + "\n")
-          puts file
+        if file_has_null_ending?(filename)
+          output.write(filename + "\n")
+          puts filename
         end
       rescue Exception => e
         errors << e
